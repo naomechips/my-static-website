@@ -1,0 +1,28 @@
+name: CI Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install HTML Tidy
+      run: sudo apt-get install tidy
+
+    - name: Validate HTML
+      run: tidy -errors index.html
+
+    - name: Install W3C CSS Validator
+      run: sudo apt-get install libwww-perl
+
+    - name: Validate CSS
+      run: |   
+        echo "Validating CSS..."
+        curl -s --data-urlencode "go=Validate" --data-urlencode "file=@css/styles.css" "https://jigsaw.w3.org/css-validator/validator"
